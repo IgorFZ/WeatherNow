@@ -1,0 +1,12 @@
+#inlineRadio1,
+#inlineRadio2 {
+    margin-left: -0.25rem;
+}
+
+.details-weather {
+    padding-top: 10px;
+}
+
+.mb-2rem {
+	margin-bottom: .2rem !important;
+}
