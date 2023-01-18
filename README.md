@@ -27,3 +27,6 @@ npm run dev
 ```sh
 npm run build
 ```
+
+### Webpage
+You can acess the webpage [here!]( https://weathernow.bohr.io)
