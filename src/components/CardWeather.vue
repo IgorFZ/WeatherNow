@@ -1,7 +1,7 @@
 <template>
     <section class="vh-100">
         <div class="container py-5 h-100">
-      
+          <Message :msg="msg"  v-show="msg"/>
           <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-md-8 col-lg-6 col-xl-4">
       
@@ -19,13 +19,13 @@
       
               <div class="mb-4 pb-2">
                 <div class="form-check form-check-inline" @click="setAdress()" >
-                  <input v-model="checkbox" class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
+                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
                     value="option1" checked />
                   <label class="form-check-label" for="inlineRadio1">Celsius</label>
                 </div>
       
                 <div class="form-check form-check-inline" @click="setAdress()" >
-                  <input v-model="checkbox" class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2"
+                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2"
                     value="option2" />
                   <label class="form-check-label" for="inlineRadio2">Farenheit</label>
                 </div>
@@ -59,7 +59,9 @@
 </template>
 
 <script>
+import Message from './Message.vue';
 export default {
+  components: { Message },
     name: "CardWeather",
     data() {
         return {
@@ -74,6 +76,7 @@ export default {
             condition: null,
             iconUrl: null,
             local_time: null,
+            msg: null,
         }
     },
     methods: {
@@ -91,8 +94,6 @@ export default {
             var vm = this;
 
             axios.request(options).then(function (response) {
-                console.log(response);
-                console.log((response.data.location.localtime).substr(10));
                 vm.location =  `${response.data.location.name}, ${response.data.location.country}`;
                 if (checkbox[0].checked == true) {
                     vm.current_temperature =`${response.data.current.temp_c}°C`;
@@ -129,34 +130,34 @@ export default {
             };
 
             var vm = this;
-            this.adress = this.adressSearch;
 
             axios.request(options).then(function (response) {
-                console.log(response.data);
-                vm.location =  `${response.data.location.name}, ${response.data.location.country}`;
-                if (checkbox[0].checked == true) {
-                    vm.current_temperature =`${response.data.current.temp_c}°C`;
-                    vm.feels_like = `${response.data.current.feelslike_c}°C`;
-                } else {
-                    vm.current_temperature = `${response.data.current.temp_f}°F`;
-                    vm.feels_like = `${response.data.current.feelslike_f}°F`;
-                }
-                
-                vm.wind = `${response.data.current.wind_kph}km/h`;
-                vm.humidity = `${response.data.current.humidity}%`;
-                vm.condition = `${response.data.current.condition.text}`;
+              vm.location =  `${response.data.location.name}, ${response.data.location.country}`;
+              if (checkbox[0].checked == true) {
+                  vm.current_temperature =`${response.data.current.temp_c}°C`;
+                  vm.feels_like = `${response.data.current.feelslike_c}°C`;
+              } else {
+                  vm.current_temperature = `${response.data.current.temp_f}°F`;
+                  vm.feels_like = `${response.data.current.feelslike_f}°F`;
+              }
+              
+              vm.wind = `${response.data.current.wind_kph}km/h`;
+              vm.humidity = `${response.data.current.humidity}%`;
+              vm.condition = `${response.data.current.condition.text}`;
 
-                //var iconUrl = `${response.data.current.condition.icon}`;
-                vm.iconUrl = `${response.data.current.condition.icon}`;
+              //var iconUrl = `${response.data.current.condition.icon}`;
+              vm.iconUrl = `${response.data.current.condition.icon}`;
 
-                // Save Adress in Local Storage
-                localStorage.adress = vm.adressSearch;
+              // Save Adress in Local Storage
+              localStorage.adress = vm.adressSearch;
+              // Save Adress Session
+              vm.adress = vm.adressSearch;
+
+            }).catch(function (error) {
+              vm.msg = "Not Found!"
+              // clear message
+              setTimeout(() => vm.msg = "", 3000)
             });
-            
-
-            //this.adress = `${this.res.data.location.name}`;
-
-            
         }
     },
     created() {
@@ -165,9 +166,6 @@ export default {
         } else {
             this.adress = 'auto:ip';
         }
-
-        console.log(this.adress);
-
         this.setAdress();
     }
 }
