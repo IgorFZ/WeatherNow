@@ -110,7 +110,7 @@ export default {
                 //var iconUrl = `${response.data.current.condition.icon}`;
                 vm.iconUrl = `${response.data.current.condition.icon}`;
 
-                vm.local_time = `${(response.data.location.localtime).substr(10)}`
+                vm.local_time = `${(response.data.location.localtime).substr(10)}`;
             });
             
 
@@ -132,6 +132,7 @@ export default {
             var vm = this;
 
             axios.request(options).then(function (response) {
+              console.log(response.data.location.region);
               vm.location =  `${response.data.location.name}, ${response.data.location.country}`;
               if (checkbox[0].checked == true) {
                   vm.current_temperature =`${response.data.current.temp_c}°C`;
@@ -147,6 +148,8 @@ export default {
 
               //var iconUrl = `${response.data.current.condition.icon}`;
               vm.iconUrl = `${response.data.current.condition.icon}`;
+
+              vm.local_time = `${(response.data.location.localtime).substr(10)}`
 
               // Save Adress in Local Storage
               localStorage.adress = vm.adressSearch;
